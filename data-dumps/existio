@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "grabbing existio dump"
+
+URL="https://existio.qnzl.now.sh"
+
+curl -H "x-exist-access-token: $(lockbox watchers/exist/accessToken)" -H "Authorization: Bearer $(lockbox watchers/jwtToken)" "${URL}/api/pull" -o "$DATA_DUMP_PATH/existio-$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+REFRESH_TOKEN=$(curl -X POST "https://withings.qnzl.now.sh/api/refresh-token?refreshToken=$(lockbox watchers/withings/refreshToken)")
+
+ACCESS_TOKEN=$(echo $REFRESH_TOKEN | jq .access_token)
+REFRESH_TOKEN=$(echo $REFRESH_TOKEN | jq .refresh_token)
+
+REFRESH_TOKEN=$(echo ${REFRESH_TOKEN:1:40})
+ACCESS_TOKEN=$(echo ${ACCESS_TOKEN:1:40})
+
+lockbox watchers/withings/accessToken $ACCESS_TOKEN
+lockbox watchers/withings/refreshToken $REFRESH_TOKEN
+
+cd ~/.lockbox && git push

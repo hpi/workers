@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo 'Syncing files to server'
+rsync --exclude=node_modules/ -rave "ssh -i ~/.ssh/qnzl -A" * root@8.9.3.221:watchers;
+echo 'SSHing in and restarting the server'
+ssh root@8.9.3.221 -i ~/.ssh/qnzl "cd watchers && npm install"

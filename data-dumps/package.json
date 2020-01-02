@@ -1,0 +1,14 @@
+{
+  "name": "@watchers/data-dumps",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Madeline <maddie@qnzl.co>",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.29.1",
+    "node-fetch": "^2.6.1"
+  }
+}

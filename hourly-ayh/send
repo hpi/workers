@@ -1,0 +1,8 @@
+#!/bin/bash
+
+curl "https://messaging.qnzl.vercel.app/api/outgoing/sms" \
+  -H "Authorization: API $(lockbox watchers/jwtToken)" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d '{"from": "+19083565835", "to": "$(lockbox personalPhoneNumber)", "body": "Rate 1 - 10 of your happiness"}'
+

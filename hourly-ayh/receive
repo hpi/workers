@@ -1,0 +1,13 @@
+#!/bin/bash
+
+THREAD_ID=$(echo -n "$(lockbox personalPhoneNumber)-+19083565835" | md5sum | cut -d' ' -f1)
+
+CURRENT_DATE=$(date +"%Y-%m-%dT00:00:00-05:00")
+
+echo $CURRENT_DATE
+MESSAGES=$(curl "https://phoneprivacy.co/api/v1/sms/$(lockbox personalPhoneNumber)/+19083565835?after=${CURRENT_DATE}" \
+  -H "Authorization: API $(lockbox watchers/phoneprivacy/apiKey)")
+
+RATINGS=$(echo $MESSAGES | jq '.thread | map([.body,.dateSent]) | flatten')
+
+echo $RATINGS

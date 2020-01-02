@@ -1,0 +1,18 @@
+#!/bin/bash
+
+REFRESH_TOKEN=$(curl -X POST "https://existio.qnzl.now.sh/api/refresh-token?refreshToken=$(lockbox watchers/exist/refreshToken)")
+
+echo $REFRESH_TOKEN
+
+ACCESS_TOKEN=$(echo $REFRESH_TOKEN | jq .access_token)
+REFRESH_TOKEN=$(echo $REFRESH_TOKEN | jq .refresh_token)
+
+REFRESH_TOKEN=$(echo ${REFRESH_TOKEN:1:40})
+ACCESS_TOKEN=$(echo ${ACCESS_TOKEN:1:40})
+
+echo $REFRESH_TOKEN
+
+lockbox watchers/exist/accessToken $ACCESS_TOKEN
+lockbox watchers/exist/refreshToken $REFRESH_TOKEN
+
+cd ~/.lockbox && git push

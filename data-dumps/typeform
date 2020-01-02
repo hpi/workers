@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "grabbing typeform dump"
+
+URL="https://typeform.qnzl.now.sh"
+
+curl -H "Authorization: Bearer $(lockbox watchers/jwtToken)" "${URL}/api/pull?formId=uPfRdg" -o "$DATA_DUMP_PATH/typeform-$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
+

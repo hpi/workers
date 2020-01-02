@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SERVICES=(trello plaid jmap todoist)
+
+for service in ${SERVICES[*]}; do
+  echo "grabbing $service dump"
+
+  URL="https://${service}.qnzl.now.sh"
+
+  echo $URL
+
+  curl -H "Authorization: Bearer $(lockbox watchers/jwtToken)" "${URL}/api/pull" -o "/home/maddie/data-dumps/${service}-$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
+done
+

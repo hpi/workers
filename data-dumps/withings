@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "grabbing withings dump"
+
+URL="https://withings.qnzl.now.sh"
+
+echo $URL
+
+curl -H "x-withings-access-token: $(lockbox watchers/withings/accessToken)" -H "Authorization: Bearer $(lockbox watchers/jwtToken)" "${URL}/api/pull" -o "$DATA_DUMP_PATH/withings-$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
+

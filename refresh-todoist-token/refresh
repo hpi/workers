@@ -1,0 +1,14 @@
+#!/bin/bash
+
+REFRESH_TOKEN=$(curl -X POST "https://todoist.qnzl.now.sh/api/refresh-token?refreshToken=$(lockbox watchers/todoist/refreshToken)")
+
+ACCESS_TOKEN=$(echo $REFRESH_TOKEN | jq .access_token)
+REFRESH_TOKEN=$(echo $REFRESH_TOKEN | jq .refresh_token)
+
+REFRESH_TOKEN=$(echo ${REFRESH_TOKEN:1:40})
+ACCESS_TOKEN=$(echo ${ACCESS_TOKEN:1:40})
+
+lockbox watchers/todoist/accessToken $ACCESS_TOKEN
+lockbox watchers/todoist/refreshToken $REFRESH_TOKEN
+
+cd ~/.lockbox && git push

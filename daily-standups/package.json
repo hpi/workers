@@ -1,0 +1,16 @@
+{
+  "name": "@workers/daily-standups",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Madeline Cameron <maddie@qnzl.co>",
+  "license": "MIT"
+}
