@@ -1,0 +1,18 @@
+{
+  "name": "@watchers/hourly-ayh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "receive.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Madeline Cameron <maddie@qnzl.co>",
+  "license": "MIT",
+  "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.34",
+    "node-fetch": "^2.6.0",
+    "superagent": "^5.2.2"
+  }
+}
