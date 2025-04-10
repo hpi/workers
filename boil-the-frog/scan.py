@@ -57,7 +57,8 @@ def extract_checked_boxes(image_path, btf_type):
     # Read and encode the image
     with open(image_path, "rb") as image_file:
         base64_image = base64.b64encode(image_file.read()).decode('utf-8')
-    
+
+    #print("BASE64 IMAGE:", base64_image)
     # Prepare the prompt based on document type
     prompt = f"""
     Given the attached image:
@@ -97,9 +98,7 @@ def extract_checked_boxes(image_path, btf_type):
                         {"type": "input_text", "text": prompt},
                         {
                             "type": "input_image",
-                            "image_url": {
-                                "url": f"data:image/png;base64,{base64_image}"
-                            }
+                            "image_url": f"data:image/png;base64,{base64_image}"
                         }
                     ]
                 }
@@ -131,21 +130,16 @@ def extract_checked_boxes(image_path, btf_type):
         }
                 }
         )
-        
-        # Directly parse the JSON response content
-        response_content = response.choices[0].message.content
         try:
-            # The response should be a JSON string, load it directly
-            parsed_json = json.loads(response_content)
+            output = json.loads(response.output[0].content[0].text)
+            print("OUTPUT:", output)
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON response from OpenAI: {e}")
-            print(f"Received content: {response_content}")
-            checked_items = []
+            print(f"Received content: {output}")
         except KeyError:
-            print(f"Error: 'checked_items' key not found in JSON response: {parsed_json}")
-            checked_items = []
+            print(f"Error: 'checked_items' key not found in JSON response: {output}")
             
-        return checked_items
+        return output
         
     except Exception as e:
         print(f"Error analyzing document with OpenAI Vision API: {e}")
@@ -164,10 +158,11 @@ def main():
     intermediate_file = f"intermediate-{btf_type}-{current_date}.png"
     output_file = f"scan-{btf_type}-{current_date}.png"
 
-    #scan_document(scanner_name, intermediate_file)
+    scan_document(scanner_name, intermediate_file)
     #corrected_file = rotate_document_if_needed(intermediate_file)
-    tasks = extract_checked_boxes("test-this.png", btf_type)
-    print("GOT TASKS:", tasks)
+    results = extract_checked_boxes(intermediate_file, btf_type)
+
+    print(results)
 
 if __name__ == "__main__":
     main()
