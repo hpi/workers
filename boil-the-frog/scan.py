@@ -90,7 +90,7 @@ def extract_checked_boxes(image_path, btf_type):
     try:
         # Call OpenAI Vision API with gpt-4o and JSON mode
         response = client.responses.create(
-            model="gpt-4o",
+            model="gpt-4.1",
             input=[
                 {
                     "role": "user",
@@ -146,6 +146,7 @@ def extract_checked_boxes(image_path, btf_type):
         return []
 
 def main():
+<<<<<<< Updated upstream
     parser = argparse.ArgumentParser(description="Scan BTF document in")
     parser.add_argument("type", help="Type of BTF document to print")
     parser.add_argument("scanner_ip", help="IP of the scanner")
@@ -162,8 +163,18 @@ def main():
     #corrected_file = rotate_document_if_needed(intermediate_file)
     results = extract_checked_boxes(intermediate_file, btf_type)
 
-    print(results)
+=======
+    current_date = date.today().strftime("%Y-%m-%d-%H-%M-%S")
+    scanner_name = f"airscan:w0:CANON INC. TR4700 series'"
+    intermediate_file = f"intermediate-{current_date}.png"
+    output_file = f"scan-{current_date}.png"
 
+    script_path = os.path.dirname(__file__)
+    scan_document(scanner_name, intermediate_file)
+    #corrected_file = rotate_document_if_needed(intermediate_file)
+    results = extract_checked_boxes(os.path.join(script_path, intermediate_file))
+>>>>>>> Stashed changes
+    print(results)
 if __name__ == "__main__":
     main()
 
