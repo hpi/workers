@@ -40,7 +40,7 @@ def scan_document(scanner_name, output_file):
         print(f"An error occurred while scanning: {e}")
         print(f"Error output: {e.stderr.decode()}")
 
-def extract_checked_boxes(image_path, btf_type):
+def extract_checked_boxes(image_path):
     """
     Analyzes a scanned document using OpenAI's Vision API to identify checked boxes and their associated text.
     
@@ -63,7 +63,7 @@ def extract_checked_boxes(image_path, btf_type):
     prompt = f"""
     Given the attached image:
 
-    Checklist Checkmarks:
+    Chores Checkmarks:
 
     List all boxes with a pen-written “X” in the box to the left of the task description. Make sure to read the second column as well.
 
@@ -85,6 +85,10 @@ def extract_checked_boxes(image_path, btf_type):
 
     Treat all labels as row anchors, not column headers.
     Extract only text that is horizontally aligned with the label—on the same line, not anywhere beneath it.
+
+    If the document has a "What would you change" section, return "eod" as the btf_type, otherwise return "sod".
+
+    If the btf_type is sod, there will also be a section headed as "Tasks", each row is a new task. Tell me what tasks are checked off as well, make sure that the pen marked X is on the same row as the task.
     """ 
     
     try:
@@ -110,7 +114,7 @@ def extract_checked_boxes(image_path, btf_type):
             "schema": {
                 "type": "object",
                 "properties": {
-                    "checked_items": {
+                    "chores": {
                         "type": "array", 
                         "items": {
                             "type": "string"
@@ -121,9 +125,18 @@ def extract_checked_boxes(image_path, btf_type):
                     },
                     "left_off_at": {
                         "type": "string"
+                    },
+                    "btf_type": {   
+                        "type": "string"
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 },
-                "required": ["checked_items", "do_differently", "left_off_at"],
+                "required": ["chores", "do_differently", "left_off_at", "btf_type", "tasks"],
                 "additionalProperties": False
             },
             "strict": True
@@ -132,7 +145,6 @@ def extract_checked_boxes(image_path, btf_type):
         )
         try:
             output = json.loads(response.output[0].content[0].text)
-            print("OUTPUT:", output)
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON response from OpenAI: {e}")
             print(f"Received content: {output}")
@@ -146,24 +158,6 @@ def extract_checked_boxes(image_path, btf_type):
         return []
 
 def main():
-<<<<<<< Updated upstream
-    parser = argparse.ArgumentParser(description="Scan BTF document in")
-    parser.add_argument("type", help="Type of BTF document to print")
-    parser.add_argument("scanner_ip", help="IP of the scanner")
-    args = parser.parse_args()
-
-    scanner_ip = args.scanner_ip
-    btf_type = args.type
-    current_date = date.today().strftime("%Y-%m-%d")
-    scanner_name = f"airscan:w0:CANON INC. TR4700 series'"
-    intermediate_file = f"intermediate-{btf_type}-{current_date}.png"
-    output_file = f"scan-{btf_type}-{current_date}.png"
-
-    scan_document(scanner_name, intermediate_file)
-    #corrected_file = rotate_document_if_needed(intermediate_file)
-    results = extract_checked_boxes(intermediate_file, btf_type)
-
-=======
     current_date = date.today().strftime("%Y-%m-%d-%H-%M-%S")
     scanner_name = f"airscan:w0:CANON INC. TR4700 series'"
     intermediate_file = f"intermediate-{current_date}.png"
@@ -173,7 +167,6 @@ def main():
     scan_document(scanner_name, intermediate_file)
     #corrected_file = rotate_document_if_needed(intermediate_file)
     results = extract_checked_boxes(os.path.join(script_path, intermediate_file))
->>>>>>> Stashed changes
     print(results)
 if __name__ == "__main__":
     main()
