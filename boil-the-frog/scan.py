@@ -1,11 +1,5 @@
 import subprocess
-import cv2
-import pytesseract
-import argparse
-from pytesseract import Output
-import re
 import os
-import numpy as np
 from datetime import date
 from openai import OpenAI
 import json
@@ -160,13 +154,10 @@ def extract_checked_boxes(image_path):
 def main():
     current_date = date.today().strftime("%Y-%m-%d-%H-%M-%S")
     scanner_name = f"airscan:w0:CANON INC. TR4700 series'"
-    intermediate_file = f"intermediate-{current_date}.png"
-    output_file = f"scan-{current_date}.png"
+    intermediate_file = os.path.join(os.path.dirname(__file__), f"intermediate-{current_date}.png")
 
-    script_path = os.path.dirname(__file__)
     scan_document(scanner_name, intermediate_file)
-    #corrected_file = rotate_document_if_needed(intermediate_file)
-    results = extract_checked_boxes(os.path.join(script_path, intermediate_file))
+    results = extract_checked_boxes(intermediate_file)
     print(results)
 if __name__ == "__main__":
     main()
