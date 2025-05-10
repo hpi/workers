@@ -3,7 +3,7 @@ const fetch = require(`node-fetch`)
 
 const {
   GRAPH_AUTHORIZATION,
-  EXIST_AUTHORIZATION
+  EXIST_AUTHORIZATION,
 } = process.env
 
 ;(async () => {
